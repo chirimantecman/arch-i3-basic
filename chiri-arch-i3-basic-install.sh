@@ -75,30 +75,31 @@ arch-chroot /mnt;
 ## TIMEZONE AND LOCALE.
 ln -sf /usr/share/zoneinfo/America/Santiago /etc/localtime;
 hwclock --systohc;
-# echo "en_US.UTF-8 UTF-8" > /etc/locale.gen;
-# echo "es_CL.UTF-8 UTF-8" >> /etc/locale.gen;
-# locale-gen;
-# echo "LANG=es_CL.UTF-8" > /etc/locale.conf;
-# echo "KEYMAP=la-latin1" > /etc/vconsole.conf;
+echo "en_US.UTF-8 UTF-8" > /etc/locale.gen;
+echo "es_CL.UTF-8 UTF-8" >> /etc/locale.gen;
+locale-gen;
+echo "LANG=es_CL.UTF-8" > /etc/locale.conf;
+echo "KEYMAP=la-latin1" > /etc/vconsole.conf;
 
 
 ## NETWORK.
-# echo "arch-i3-basic" > /etc/hostname;
+echo "arch-i3-basic" > /etc/hostname;
 # Should enable dhcpd service on reboot.
 
 
 ## USER MANAGEMENT.
-# passwd;
-# useradd -m -s /usr/bin/zsh chiri;
-# passwd chiri;
+passwd;
+useradd -m -s /usr/bin/zsh chiri;
+passwd chiri;
 
 
 ## BOOT LOADER.
-# pacman -S --noconfirm grub efibootmgr;
-# grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB;
+pacman -S --noconfirm grub efibootmgr;
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB;
+grub-mkconfig -o /boot/grub/grub.cfg;
 
 
-## REBOOT.
+## REBOOT - MUST BE DONE MANUALLY, ONLY FOR INFO.
 # exit;
-# umount -R /mnt;
+# umount -R /mnt; ## optional
 # reboot;
