@@ -40,7 +40,7 @@ timedatectl set-ntp true;
 parted /dev/sda mklabel gpt;
 parted /dev/sda mkpart boot fat32 1049KB 316MB set 1 esp on;
 parted /dev/sda mkpart swap linux-swap 316MB 852MB set 2 swap on;
-parted /dev/sda mkpart root ext4 316MB 100%;
+parted /dev/sda mkpart root ext4 852MB 100%;
 
 # Make the filesystems.
 mkfs.fat -F 32 /dev/sda1;
@@ -50,18 +50,18 @@ mkfs.ext4 /dev/sda3;
 # Mount the filesystems.
 mount --mkdir /dev/sda3 /mnt;
 mount --mkdir /dev/sda1 /mnt/boot;
-swapon /dev/sdb2;
+swapon /dev/sda2;
 
 
 ## SELECT MIRRORS AND INSTALL BASE SYSTEM.
 # Pacman packages.
 reflector --save /etc/pacman.d/mirrorlist;
 pacman -Syy archlinux-keyring;
-pacman -Syu;
-pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter lightdm-settings rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl;
+pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl;
 
 # yay packages.
 # waterfox
+# lightdm-settings
 
 
 ## FSTAB.
@@ -73,5 +73,32 @@ arch-chroot /mnt;
 
 
 ## TIMEZONE AND LOCALE.
-ln -s /usr/share/zoneinfo/America/Santiago /etc/localtime;
+ln -sf /usr/share/zoneinfo/America/Santiago /etc/localtime;
 hwclock --systohc;
+# echo "en_US.UTF-8 UTF-8" > /etc/locale.gen;
+# echo "es_CL.UTF-8 UTF-8" >> /etc/locale.gen;
+# locale-gen;
+# echo "LANG=es_CL.UTF-8" > /etc/locale.conf;
+# echo "KEYMAP=la-latin1" > /etc/vconsole.conf;
+
+
+## NETWORK.
+# echo "arch-i3-basic" > /etc/hostname;
+# Should enable dhcpd service on reboot.
+
+
+## USER MANAGEMENT.
+# passwd;
+# useradd -m -s /usr/bin/zsh chiri;
+# passwd chiri;
+
+
+## BOOT LOADER.
+# pacman -S --noconfirm grub efibootmgr;
+# grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB;
+
+
+## REBOOT.
+# exit;
+# umount -R /mnt;
+# reboot;
