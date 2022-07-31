@@ -57,7 +57,7 @@ swapon /dev/sda2;
 # Pacman packages.
 reflector --save /etc/pacman.d/mirrorlist;
 pacman -Syy archlinux-keyring;
-pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl;
+pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl virtualbox-guest-utils xorg-server-xephyr;
 
 # yay packages.
 # waterfox
@@ -97,6 +97,13 @@ pacman -S --noconfirm grub efibootmgr;
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB;
 grub-mkconfig -o /boot/grub/grub.cfg;
 
+
+## PREPARE FOR A VIRTUALBOX SHARED FOLDER.
+## Currently the vboxservice systemd service will create the /media
+## directory.
+systemctl enable vboxservice;
+usermod -a -G vboxsf root;
+usermod -a -G vboxsf chiri;
 
 ## REBOOT - MUST BE DONE MANUALLY, ONLY FOR INFO.
 # exit;
