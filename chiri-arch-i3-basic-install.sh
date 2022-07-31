@@ -84,8 +84,7 @@ echo "KEYMAP=la-latin1" > /etc/vconsole.conf;
 
 ## NETWORK.
 echo "arch-i3-basic" > /etc/hostname;
-# Should enable dhcpd service on reboot.
-
+ln -s /usr/lib/systemd/system/dhcpcd.service /etc/systemd/system/multi-user.target.wants/dhcpcd.service;
 
 ## USER MANAGEMENT.
 passwd;
