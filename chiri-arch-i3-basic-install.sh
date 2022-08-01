@@ -110,7 +110,10 @@ usermod -a -G vboxsf chiri;
 ## COPY FILES AND SET PERMISSIONS.
 tar -xzvf files.tar.gz;
 cp -r files/config/home/.config /home/chiri;
-chown -R chiri:chiri /home/chiri/.config;
+cp -r files/config/home/.emacs.d /home/chiri;
+cp files/config/home/.xprofile /home/chiri;
+cp files/config/home/.Xresources /home/chiri;
+chown -R chiri:chiri /home/chiri;
 cp -r files/config/etc/X11 /etc;
 cp -r files/config/etc/lightdm /etc;
 cp -r files/config/usr/share/applications /usr/share;
