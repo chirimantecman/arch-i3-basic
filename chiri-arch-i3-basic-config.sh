@@ -5,7 +5,26 @@
 ## apps used.
 ##
 
+## VARIABLES.
+GITHUB_URL='https://raw.githubusercontent.com/chirimantecman/arch-i3-basic/main';
+GREETER_BG='wallpaper.jpg';
+
+
+## SET LOCALE FOR X!!.
+localectl set-x11-keymap latam;
+
+
 ## DOWNLOAD FILES.
+##
+## Greeter background, desktop background, xorg config, lightdm
+## config, slick greeter config, i3 config, polybar config, rofi
+## config, emacs config, zsh config, .xprofile, .Xresources, picom
+## config, systemd user scripts, fonts, desktop files
+wget --no-check-certificate "$GITHUB_URL/$GREETER_BG";
+
+
+## XORG.
+
 
 
 ## LIGHTDM AND GREETER.
@@ -25,6 +44,8 @@ echo '[VNCServer]' >> /etc/lightdm/lightdm.conf;
 ## /etc/lightdm/slick-greeter.conf
 ## Here we need the background image file, it has been downloaded at
 ## the first step.
+mkdir /usr/share/lightdm;
+cp wallpaper.jpg /usr/share/lightdm/wallpaper.jpg;
 echo '[Greeter]' > /etc/lightdm/slick-greeter.conf;
 echo 'background=/usr/share/lightdm/wallpaper.jpg' >> /etc/lightdm/slick-greeter.conf;
 echo 'draw-user-backgrounds=true' >> /etc/lightdm/slick-greeter.conf;

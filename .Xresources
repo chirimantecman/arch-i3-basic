@@ -1,0 +1,32 @@
+!! URxvt
+!! Colours
+URxvt.background:		#140401
+URxvt.foreground:		#dddddd
+
+!! Fonts
+URxvt.font:                     xft:DejaVuSansMono Nerd Font Mono:size=11:antialias=true
+URxvt.letterSpace:              0
+
+!! Fade
+!URxvt.fading:			50
+
+!! Scrolling
+URxvt.scrollBar:		false
+URxvt.scrollTtyOutput:		true
+URxvt.scrollTtyKeypress:	true
+URxvt.saveLines:		5000
+
+!! Extensions
+URxvt.perl-ext-common:          default,matcher,resize-font,keyboard-select,url-select
+! Matcher
+URxvt.url-launcher:             /usr/bin/xdg-open
+URxvt.matcher.button:           1
+! Url-Select
+URxvt.keysym.M-u:               perl:url-select:select_next
+URxvt.url-select.launcher:      /usr/bin/xdg-open
+URxvt.url-select.underline:     true
+URxvt.colorUL:                  #87cefa
+! Keyboard-Select
+! Use v to start selection, then to copy to clipboard Return
+URxvt.keysym.M-e:               perl:keyboard-select:activate
+URxvt.keyboard-select.clipboard:true

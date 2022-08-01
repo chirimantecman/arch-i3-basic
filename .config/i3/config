@@ -1,0 +1,169 @@
+## MOD KEY, FONT, PICOM AND BACKGROUND #################################
+exec --no-startup-id picom --config ~/.config/picom/picom.conf -b
+exec --no-startup-id feh --bg-scale ~/images/wallpapers/wallpaper.jpg
+set $mod Mod4
+font pango:DejaVu Sans Mono 12
+
+
+## POLYBAR #############################################################
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
+
+# GAPS #################################################################
+gaps inner 20
+gaps outer 0
+
+
+# COLORS AND BORDERS ###################################################
+for_window [class=".*"] border pixel 2
+default_border pixel 2
+default_floating_border pixel 2
+client.focused #000000 #000000 #000000 #c39132 #c39132
+
+
+# KEY BINDINGS #########################################################
+# Use Mouse+$mod to drag floating windows.
+floating_modifier $mod
+
+# Terminal.
+bindsym $mod+Return exec i3-sensible-terminal
+
+# kill focused window
+bindsym $mod+q kill
+
+## Emacs client.
+bindsym $mod+F1 exec "emacsclient -nc"
+        
+# Libreoffice Calc
+bindsym $mod+F2 exec "localc"
+
+# Midori - web browser
+bindsym $mod+F3 exec /usr/bin/waterfox-classic
+
+# change focus
+bindsym $mod+j focus left
+bindsym $mod+k focus down
+bindsym $mod+l focus up
+bindsym $mod+ntilde focus right
+
+# move focused window
+bindsym $mod+Shift+j move left
+bindsym $mod+Shift+k move down
+bindsym $mod+Shift+l move up
+bindsym $mod+Shift+ntilde move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+f fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# toggle tiling / floating
+#bindsym $mod+Shift+space exec --no-startup-id ~/bin/ch_i3_toggle_floating_container
+
+# change focus between tiling / floating windows
+bindsym $mod+space focus mode_toggle
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace 10
+
+# move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+r restart
+
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Logout?' -b 'Yes' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym ntilde resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Gaps.
+bindsym $mod+n gaps inner all set   0
+bindsym $mod+d gaps inner all set   20
+bindsym $mod+p gaps inner all plus  5
+bindsym $mod+m gaps inner all minus 5
+
+# Floating window sizes.
+floating_minimum_size 100 x 100
+floating_maximum_size 800 x 600
+
+# Volume controls.
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle # mute sound
+
+# Brightness.
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl s +10%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl s 10%-
+
+# Touchpad.
+bindsym XF86TouchpadToggle exec --no-startup-id ~/bin/ch_toggle_touchpad
+
+# Rofi 
+bindsym $mod+z exec --no-startup-id rofi -show
+
+
+## WINDOW RULES ########################################################
+# Leaves fullscreen mode when a pop-up... well... pops up.
+popup_during_fullscreen smart
+
+# No focus on mouse hover.
+focus_follows_mouse no
+
+# Float windows.
+for_window [class="Pavucontrol"] floating enable
+for_window [class="System Logout"] floating enable
+for_window [class="Galculator"] floating enable
