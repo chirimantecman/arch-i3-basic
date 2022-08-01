@@ -56,7 +56,6 @@ swapon /dev/sda2;
 ## SELECT MIRRORS AND INSTALL BASE SYSTEM.
 # Pacman packages.
 reflector --save /etc/pacman.d/mirrorlist;
-pacman -Syy archlinux-keyring;
 pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl virtualbox-guest-utils xorg-server-xephyr wget;
 
 # yay packages.
@@ -85,8 +84,8 @@ echo "KEYMAP=la-latin1" > /etc/vconsole.conf;
 ## NETWORK.
 echo "arch-i3-basic" > /etc/hostname;
 ln -s /usr/lib/systemd/system/dhcpcd.service /etc/systemd/system/multi-user.target.wants/dhcpcd.service;
-ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/dbus-org.freedesktop.resolve1.service
-ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/sysinit.target.wants/systemd-resolved.service
+ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/dbus-org.freedesktop.resolve1.service;
+ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/sysinit.target.wants/systemd-resolved.service;
 
 ## USER MANAGEMENT.
 passwd;
@@ -103,9 +102,31 @@ grub-mkconfig -o /boot/grub/grub.cfg;
 ## PREPARE FOR A VIRTUALBOX SHARED FOLDER.
 ## Currently the vboxservice systemd service will create the /media
 ## directory.
-systemctl enable vboxservice;
+ln -s /usr/lib/systemd/system/vboxservice.service /etc/systemd/system/multi-user.target.wants/vboxservice.service;
 usermod -a -G vboxsf root;
 usermod -a -G vboxsf chiri;
+
+
+## COPY FILES AND SET PERMISSIONS.
+tar -xzvf files.tar.gz;
+cp -r files/config/home/.config /home/chiri;
+chown -R chiri:chiri /home/chiri/.config;
+cp -r files/config/etc/X11 /etc;
+cp -r files/config/etc/lightdm /etc;
+cp -r files/config/usr/share/applications /usr/share;
+cp -r files/fonts/TTF /usr/share/fonts;
+fc-cache;
+mkdir /usr/share/lightdm;
+cp files/images/wallpaper.jpg /usr/share/lightdm;
+mkdir /home/chiri/images;
+mkdir /home/chiri/images/wallpapers;
+cp files/images/desktop-bg.jpg /home/chiri/images/wallpapers/wallpaper.jpg;
+chown -R chiri:chiri /home/chiri/images;
+
+
+## FINALLY ENABLE LIGHTDM.
+ln -s /usr/lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service;
+
 
 ## REBOOT - MUST BE DONE MANUALLY, ONLY FOR INFO.
 # exit;
