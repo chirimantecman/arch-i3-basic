@@ -56,7 +56,7 @@ swapon /dev/sda2;
 ## SELECT MIRRORS AND INSTALL BASE SYSTEM.
 # Pacman packages.
 reflector --save /etc/pacman.d/mirrorlist;
-pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl virtualbox-guest-utils xorg-server-xephyr wget;
+pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl virtualbox-guest-utils xorg-server-xephyr wget xorg-xrdb xterm;
 
 # yay packages.
 # waterfox
