@@ -69,4 +69,5 @@ genfstab -U /mnt >> /mnt/etc/fstab;
 
 ## CHROOT.
 cp chiri-arch-i3-basic-install-chroot.sh /mnt/root;
+cp files.tar.gz /mnt/root;
 arch-chroot /mnt;

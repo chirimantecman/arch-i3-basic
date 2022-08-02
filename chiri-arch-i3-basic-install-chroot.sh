@@ -15,6 +15,7 @@ echo "localectl set-x11-keymap latam" > /etc/xprofile;
 echo "arch-i3-basic" > /etc/hostname;
 ln -s /usr/lib/systemd/system/dhcpcd.service /etc/systemd/system/multi-user.target.wants/dhcpcd.service;
 ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/dbus-org.freedesktop.resolve1.service;
+mkdir /etc/systemd/system/sysinit.target.wants;
 ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/sysinit.target.wants/systemd-resolved.service;
 
 ## USER MANAGEMENT.
