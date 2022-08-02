@@ -8,7 +8,6 @@ echo "es_CL.UTF-8 UTF-8" >> /etc/locale.gen;
 locale-gen;
 echo "LANG=es_CL.UTF-8" > /etc/locale.conf;
 echo "KEYMAP=la-latin1" > /etc/vconsole.conf;
-echo "localectl set-x11-keymap latam" > /etc/xprofile;
 
 
 ## NETWORK.
