@@ -109,5 +109,5 @@ cp files.tar.gz /mnt/root;
 cp chiri-arch-i3-basic-install-chroot.sh /mnt/root;
 chmod +x /mnt/root/chiri-arch-i3-basic-install-chroot.sh;
 arch-chroot /mnt /root/chiri-arch-i3-basic-install-chroot.sh;
-umount -R /mnt;
-reboot;
+#umount -R /mnt;
+#reboot;
