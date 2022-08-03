@@ -8,17 +8,57 @@
 ## Let's follow the install guide, shall we?...
 
 
-## REQUIRED PACKAGES INCLUDED IN LIVE ENVIRONMENT
-## curl
-## parted
-## iw
-## reflector
-## pacstrap
-
-
 ## CONFIGURATION OPTIONS
-KEYBOARD=la-latin1;
-
+KEYBOARD='la-latin1';
+PACSTRAP_LIST_FILE='pacstrap-packages';
+cat <<EOT >> $PACSTRAP_LIST_FILE
+base
+base-devel
+linux
+linux-firmware
+parted
+reflector
+cryptsetup
+curl
+dhcpcd
+gnupg
+iw
+iwd
+kbd
+keyutils
+man-db
+man-pages
+texinfo
+nano
+perl
+python
+sudo
+xorg-server
+zsh
+i3-gaps
+emacs
+polybar
+rofi
+lightdm
+lightdm-slick-greeter
+rxvt-unicode
+libreoffice-fresh
+gucharmap
+epdfview
+picom
+feh
+ispell
+hunspell
+hunspell-en_us
+hunspell-es_cl
+virtualbox-guest-utils
+xorg-server-xephyr
+wget
+xorg-xrdb
+xterm
+grub
+efibootmgr
+EOT
 
 ## KEYBOARD LAYOUT
 ## For now just latin-american keyboard.
@@ -56,11 +96,7 @@ swapon /dev/sda2;
 ## SELECT MIRRORS AND INSTALL BASE SYSTEM.
 # Pacman packages.
 reflector --save /etc/pacman.d/mirrorlist;
-pacstrap /mnt base linux linux-firmware parted reflector cryptsetup curl dhcpcd gnupg iw iwd kbd keyutils man-db man-pages texinfo nano perl python sudo xorg-server zsh i3-gaps emacs polybar rofi lightdm lightdm-slick-greeter rxvt-unicode libreoffice-fresh gucharmap epdfview picom feh ispell hunspell hunspell-en_us hunspell-es_cl virtualbox-guest-utils xorg-server-xephyr wget xorg-xrdb xterm;
-
-# yay packages.
-# waterfox
-# lightdm-settings
+pacstrap /mnt - < $PACSTRAP_LIST_FILE;
 
 
 ## FSTAB.
@@ -70,4 +106,6 @@ genfstab -U /mnt >> /mnt/etc/fstab;
 ## CHROOT.
 cp chiri-arch-i3-basic-install-chroot.sh /mnt/root;
 cp files.tar.gz /mnt/root;
-arch-chroot /mnt;
+arch-chroot /mnt /root/chiri-arch-i3-basic-install-chroot.sh;
+umount -R /mnt;
+reboot;

@@ -1,13 +1,26 @@
 #!/usr/bin/bash
 
+
+## CONFIGURATION OPTIONS.
+UNPRIV_USER='chiri';
+TZ='America/Santiago';
+CF_LOCALES=('es_CL.UTF-8 UTF-8' 'en_US.UTF-8 UTF-8');
+VC_KBD='la-latin1';
+YAY_LIST_FILE='yay-packages';
+cat <<EOT >> $YAY_LIST_FILE
+waterfox-classic-bin
+lightdm-settings
+EOT
+
+
 ## TIMEZONE AND LOCALE.
-ln -sf /usr/share/zoneinfo/America/Santiago /etc/localtime;
+ln -sf /usr/share/zoneinfo/$TZ /etc/localtime;
 hwclock --systohc;
-echo "en_US.UTF-8 UTF-8" > /etc/locale.gen;
-echo "es_CL.UTF-8 UTF-8" >> /etc/locale.gen;
+rm /etc/locale.gen;
+for l in $CF_LOCALES; do echo $l >> /etc/locale.gen; done;
 locale-gen;
-echo "LANG=es_CL.UTF-8" > /etc/locale.conf;
-echo "KEYMAP=la-latin1" > /etc/vconsole.conf;
+echo "LANG=$CF_LOCALES[1]" > /etc/locale.conf;
+echo "KEYMAP=$VC_KBD" > /etc/vconsole.conf;
 
 
 ## NETWORK.
@@ -17,14 +30,28 @@ ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/dbus-
 mkdir /etc/systemd/system/sysinit.target.wants;
 ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/sysinit.target.wants/systemd-resolved.service;
 
+
 ## USER MANAGEMENT.
+echo "Please set the root password";
 passwd;
-useradd -m -s /usr/bin/zsh chiri;
-passwd chiri;
+echo "Adding user $UNPRIV_USER";
+useradd -m -s /usr/bin/zsh $UNPRIV_USER;
+echo "User added. Please set the user password";
+passwd $UNPRIV_USER;
+
+
+# YAY AND PACKAGES.
+git clone https://aur.archlinux.org/yay.git /home/$UNPRIV_USER/yay;
+chown -R $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER/yay;
+cd /home/$UNPRIV_USER/yay;
+runuser -u $UNPRIV_USER -- makepkg -si;
+runuser -u $UNPRIV_USER -- yay -Y --gendb;
+runuser -u $UNPRIV_USER -- yay -Syu --devel;
+runuser -u $UNPRIV_USER -- yay -Y --devel --save;
+runuser -u $UNPRIV_USER -- yay -S - < $YAY_LIST_FILE;
 
 
 ## BOOT LOADER.
-pacman -S --noconfirm grub efibootmgr;
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB;
 grub-mkconfig -o /boot/grub/grub.cfg;
 
@@ -34,16 +61,16 @@ grub-mkconfig -o /boot/grub/grub.cfg;
 ## directory.
 ln -s /usr/lib/systemd/system/vboxservice.service /etc/systemd/system/multi-user.target.wants/vboxservice.service;
 usermod -a -G vboxsf root;
-usermod -a -G vboxsf chiri;
+usermod -a -G vboxsf $UNPRIV_USER;
 
 
 ## COPY FILES AND SET PERMISSIONS.
 tar -xzvf files.tar.gz;
-cp -r files/config/home/.config /home/chiri;
-cp -r files/config/home/.emacs.d /home/chiri;
-cp files/config/home/.xprofile /home/chiri;
-cp files/config/home/.Xresources /home/chiri;
-chown -R chiri:chiri /home/chiri;
+cp -r files/config/home/.config /home/$UNPRIV_USER;
+cp -r files/config/home/.emacs.d /home/$UNPRIV_USER;
+cp files/config/home/.xprofile /home/$UNPRIV_USER;
+cp files/config/home/.Xresources /home/$UNPRIV_USER;
+chown -R $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER;
 cp -r files/config/etc/X11 /etc;
 cp -r files/config/etc/lightdm /etc;
 cp -r files/config/usr/share/applications /usr/share;
@@ -51,20 +78,14 @@ cp -r files/fonts/TTF /usr/share/fonts;
 fc-cache;
 mkdir /usr/share/lightdm;
 cp files/images/wallpaper.jpg /usr/share/lightdm;
-mkdir /home/chiri/images;
-mkdir /home/chiri/images/wallpapers;
-cp files/images/desktop-bg.jpg /home/chiri/images/wallpapers/wallpaper.jpg;
-chown -R chiri:chiri /home/chiri/images;
+mkdir /home/$UNPRIV_USER/images;
+mkdir /home/$UNPRIV_USER/images/wallpapers;
+cp files/images/desktop-bg.jpg /home/$UNPRIV_USER/images/wallpapers/wallpaper.jpg;
+chown -R $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER/images;
 
 
 ## FINALLY ENABLE EMACS DAEMON AND LIGHTDM.
-mkdir /home/chiri/.config/systemd/user/default.target.wants;
-ln -s /home/chiri/.config/systemd/user/emacs.service /home/chiri/.config/systemd/user/default.target.wants/emacs.service;
-chown -R chiri:chiri /home/chiri/.config/systemd/user;
+mkdir /home/$UNPRIV_USER/.config/systemd/user/default.target.wants;
+ln -s /home/$UNPRIV_USER/.config/systemd/user/emacs.service /home/$UNPRIV_USER/.config/systemd/user/default.target.wants/emacs.service;
+chown -R $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER/.config/systemd/user;
 ln -s /usr/lib/systemd/system/lightdm.service /etc/systemd/system/display-manager.service;
-
-
-## REBOOT - MUST BE DONE MANUALLY, ONLY FOR INFO.
-# exit;
-# umount -R /mnt; ## optional
-# reboot;
