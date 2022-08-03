@@ -3,9 +3,17 @@
 
 ## CONFIGURATION OPTIONS.
 UNPRIV_USER='chiri';
+
 TZ='America/Santiago';
-CF_LOCALES=('es_CL.UTF-8 UTF-8' 'en_US.UTF-8 UTF-8');
+
+CF_LOCALES=/etc/locale.gen;
+cat <<EOT > $CF_LOCALES
+es_CL.UTF-8 UTF-8
+en_US.UTF-8 UTF-8
+EOT
+
 VC_KBD='la-latin1';
+
 YAY_LIST_FILE='yay-packages';
 cat <<EOT >> $YAY_LIST_FILE
 waterfox-classic-bin
@@ -16,10 +24,8 @@ EOT
 ## TIMEZONE AND LOCALE.
 ln -sf /usr/share/zoneinfo/$TZ /etc/localtime;
 hwclock --systohc;
-rm /etc/locale.gen;
-for l in $CF_LOCALES; do echo $l >> /etc/locale.gen; done;
 locale-gen;
-echo "LANG=$CF_LOCALES[1]" > /etc/locale.conf;
+echo "LANG=`head -n 1 /etc/locale.gen`" > /etc/locale.conf;
 echo "KEYMAP=$VC_KBD" > /etc/vconsole.conf;
 
 
@@ -65,6 +71,7 @@ usermod -a -G vboxsf $UNPRIV_USER;
 
 
 ## COPY FILES AND SET PERMISSIONS.
+cd /root;
 tar -xzvf files.tar.gz;
 cp -r files/config/home/.config /home/$UNPRIV_USER;
 cp -r files/config/home/.emacs.d /home/$UNPRIV_USER;
