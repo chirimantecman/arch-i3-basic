@@ -44,6 +44,7 @@ echo "Adding user $UNPRIV_USER";
 useradd -m -s /usr/bin/zsh $UNPRIV_USER;
 echo "User added. Please set the user password";
 passwd $UNPRIV_USER;
+echo "$UNPRIV_USER ALL=(ALL:ALL) ALL" > /etc/sudoers.d/00-unpriviliged;
 
 
 # YAY AND PACKAGES.
