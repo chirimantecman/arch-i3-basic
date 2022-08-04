@@ -14,8 +14,8 @@ EOT
 
 VC_KBD='la-latin1';
 
-YAY_LIST_FILE='yay-packages';
-cat <<EOT >> $YAY_LIST_FILE
+YAY_LIST_FILE=yay-packages;
+cat <<EOT >> /root/$YAY_LIST_FILE
 waterfox-classic-bin
 lightdm-settings
 EOT
@@ -25,7 +25,7 @@ EOT
 ln -sf /usr/share/zoneinfo/$TZ /etc/localtime;
 hwclock --systohc;
 locale-gen;
-echo "LANG=`head -n 1 /etc/locale.gen`" > /etc/locale.conf;
+echo "LANG=`head -n 1 /etc/locale.gen | cut -f 1 -d " "`" > /etc/locale.conf;
 echo "KEYMAP=$VC_KBD" > /etc/vconsole.conf;
 
 
@@ -55,7 +55,9 @@ runuser -u $UNPRIV_USER -- makepkg -si;
 runuser -u $UNPRIV_USER -- yay -Y --gendb;
 runuser -u $UNPRIV_USER -- yay -Syu --devel;
 runuser -u $UNPRIV_USER -- yay -Y --devel --save;
-runuser -u $UNPRIV_USER -- yay -S - < $YAY_LIST_FILE;
+cp /root/$YAY_LIST_FILE /home/$UNPRIV_USER;
+chown $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER/$YAY_LIST_FILE;
+runuser -u $UNPRIV_USER -- yay -S - < /home/$UNPRIV_USER/$YAY_LIST_FILE;
 
 
 ## BOOT LOADER.
@@ -81,7 +83,6 @@ cp files/config/home/.Xresources /home/$UNPRIV_USER;
 chown -R $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER;
 cp -r files/config/etc/X11 /etc;
 cp -r files/config/etc/lightdm /etc;
-cp -r files/config/usr/share/applications /usr/share;
 cp -r files/fonts/TTF /usr/share/fonts;
 fc-cache;
 mkdir /usr/share/lightdm;

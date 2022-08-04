@@ -96,7 +96,7 @@ swapon /dev/sda2;
 
 ## SELECT MIRRORS AND INSTALL BASE SYSTEM.
 # Pacman packages.
-reflector --save /etc/pacman.d/mirrorlist;
+reflector --latest 15 --country "United States",Chile --protocol https,http --sort rate --save /etc/pacman.d/mirrorlist;
 pacstrap /mnt - < $PACSTRAP_LIST_FILE;
 
 
