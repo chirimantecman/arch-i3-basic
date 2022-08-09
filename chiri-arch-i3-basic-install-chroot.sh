@@ -20,6 +20,8 @@ waterfox-classic-bin
 lightdm-settings
 EOT
 
+HOSTNM='arch-i3-basic';
+
 
 ## TIMEZONE AND LOCALE.
 ln -sf /usr/share/zoneinfo/$TZ /etc/localtime;
@@ -30,10 +32,18 @@ echo "KEYMAP=$VC_KBD" > /etc/vconsole.conf;
 
 
 ## NETWORK.
-echo "arch-i3-basic" > /etc/hostname;
+echo $HOSTNM > /etc/hostname;
+# dhcp.
+if [[ ! -d /etc/systemd/system/multi-user.target.wants ]]; then
+    mkdir /etc/systemd/system/multi-user.target.wants;
+fi;
 ln -s /usr/lib/systemd/system/dhcpcd.service /etc/systemd/system/multi-user.target.wants/dhcpcd.service;
+
+# resolved.
 ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/dbus-org.freedesktop.resolve1.service;
-mkdir /etc/systemd/system/sysinit.target.wants;
+if [[ ! -d /etc/systemd/system/sysinit.target.wants ]]; then
+    mkdir /etc/systemd/system/sysinit.target.wants;
+fi;
 ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/sysinit.target.wants/systemd-resolved.service;
 
 
