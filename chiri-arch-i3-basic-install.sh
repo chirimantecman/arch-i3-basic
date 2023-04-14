@@ -24,51 +24,60 @@ PACSTRAP_LIST_FILE='pacstrap-packages';
 cat <<EOT >> $PACSTRAP_LIST_FILE
 base
 base-devel
-linux
-linux-firmware
-parted
-reflector
 cryptsetup
 curl
+deno
 dhcpcd
+efibootmgr
+emacs
+epdfview
+feh
+git
 gnupg
+grub
+gucharmap
+hunspell
+hunspell-en_us
+hunspell-es_cl
+i3-gaps
+ispell
 iw
 iwd
 kbd
 keyutils
-man-db
-man-pages
-texinfo
-nano
-perl
-python
-sudo
-xorg-server
-zsh
-i3-gaps
-emacs
-polybar
-rofi
+libreoffice-fresh
 lightdm
 lightdm-slick-greeter
-rxvt-unicode
-libreoffice-fresh
-gucharmap
-epdfview
+linux
+linux-firmware
+lvm2
+man-db
+man-pages
+nano
+nodejs
+npm
+ntfs-3g
+parted
+perl
 picom
-feh
-ispell
-hunspell
-hunspell-en_us
-hunspell-es_cl
+polybar
+python
+ranger
+reflector
+rofi
+rxvt-unicode
+sudo
+sxhkd
+texinfo
+unzip
 virtualbox-guest-utils
-xorg-server-xephyr
 wget
+xorg-server
+xorg-server-xephyr
+xorg-xdpyinfo
 xorg-xrdb
 xterm
-git
-grub
-efibootmgr
+zshg
 EOT
 
 
@@ -236,7 +245,7 @@ fi;
 
 ## SELECT MIRRORS AND INSTALL BASE SYSTEM.
 # Pacman packages.
-reflector --latest 15 --country "United States",Chile --protocol https,http --sort rate --save /etc/pacman.d/mirrorlist;
+reflector --latest 5 --country "United States",Chile --protocol https,http --sort rate --save /etc/pacman.d/mirrorlist;
 pacstrap /mnt - < $PACSTRAP_LIST_FILE;
 
 

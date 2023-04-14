@@ -16,8 +16,9 @@ VC_KBD='la-latin1';
 
 YAY_LIST_FILE=yay-packages;
 cat <<EOT >> /root/$YAY_LIST_FILE
-waterfox-classic-bin
+google-chrome
 lightdm-settings
+postman-bin
 EOT
 
 HOSTNM='arch-i3-basic';
@@ -48,10 +49,13 @@ ln -s /usr/lib/systemd/system/systemd-resolved.service /etc/systemd/system/sysin
 
 
 ## USER MANAGEMENT.
+echo "";
 echo "Please set the root password";
 passwd;
+echo "";
 echo "Adding user $UNPRIV_USER";
 useradd -m -s /usr/bin/zsh $UNPRIV_USER;
+echo "";
 echo "User added. Please set the user password";
 passwd $UNPRIV_USER;
 echo "$UNPRIV_USER ALL=(ALL:ALL) ALL" > /etc/sudoers.d/00-unpriviliged;
@@ -86,20 +90,13 @@ usermod -a -G vboxsf $UNPRIV_USER;
 ## COPY FILES AND SET PERMISSIONS.
 cd /root;
 tar -xzvf files.tar.gz;
-cp -r files/config/home/.config /home/$UNPRIV_USER;
-cp -r files/config/home/.emacs.d /home/$UNPRIV_USER;
-cp files/config/home/.xprofile /home/$UNPRIV_USER;
-cp files/config/home/.Xresources /home/$UNPRIV_USER;
+cp -r files/home /home/$UNPRIV_USER;
 chown -R $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER;
-cp -r files/config/etc/X11 /etc;
-cp -r files/config/etc/lightdm /etc;
-cp -r files/fonts/TTF /usr/share/fonts;
+cp -r files/etc /etc;
+cp -r files/fonts /usr/share/fonts;
 fc-cache;
 mkdir /usr/share/lightdm;
-cp files/images/wallpaper.jpg /usr/share/lightdm;
-mkdir /home/$UNPRIV_USER/images;
-mkdir /home/$UNPRIV_USER/images/wallpapers;
-cp files/images/desktop-bg.jpg /home/$UNPRIV_USER/images/wallpapers/wallpaper.jpg;
+cp files/home/media/images/wallpapers/wallpaper.jpg /usr/share/lightdm;
 chown -R $UNPRIV_USER:$UNPRIV_USER /home/$UNPRIV_USER/images;
 
 
